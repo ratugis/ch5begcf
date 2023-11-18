@@ -1,4 +1,4 @@
-package gcfbackendfa
+package gisbackend
 
 import (
 	"context"
@@ -180,36 +180,4 @@ func Login(Privatekey, MongoEnv, dbname, Colname string, r *http.Request) string
 		}
 	}
 	return pasproj.ReturnStringStruct(resp)
-}
-
-func GCFUpdateNamee(publickey, Mongostring, dbname string, Colname string, r *http.Request) string {
-	req := new(Credents)
-	resp := new(LonLatProperties)
-	err := json.NewDecoder(r.Body).Decode(&resp)
-	tokenlogin := r.Header.Get("Login")
-	if tokenlogin == "" {
-		req.Status = strconv.Itoa(http.StatusNotFound)
-		req.Message = "Header Login Not Exist"
-	} else {
-		existing := IsExist(tokenlogin, os.Getenv(publickey))
-		if !existing {
-			req.Status = strconv.Itoa(http.StatusNotFound)
-			req.Message = "Kamu kayaknya belum punya akun"
-		} else {
-			if err != nil {
-				req.Status = strconv.Itoa(http.StatusNotFound)
-				req.Message = "error parsing application/json: " + err.Error()
-			} else {
-				req.Status = strconv.Itoa(http.StatusOK)
-				Ins := UpdateNameGeo(Mongostring, dbname, context.Background(),
-					LonLatProperties{
-						Type:   resp.Type,
-						Name:   resp.Name,
-						Volume: resp.Volume,
-					})
-				req.Message = fmt.Sprintf("%v:%v", "Berhasil Update data", Ins)
-			}
-		}
-	}
-	return ReturnStringStruct(req)
 }

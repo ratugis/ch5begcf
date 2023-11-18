@@ -1,4 +1,4 @@
-package gcfbackendfa
+package gisbackend
 
 import (
 	"context"
@@ -18,9 +18,9 @@ func InsertUserdata(MongoConn *mongo.Database, username, password string) (Inser
 
 func UpdateNameGeo(Mongoenv, dbname string, ctx context.Context, val LonLatProperties) (UpdateID interface{}) {
 	conn := GetConnectionMongo(Mongoenv, dbname)
-	filter := bson.D{{Key: "volume", Value: val.Volume}}
-	update := bson.D{{Key: "$set", Value: bson.D{
-		{Key: "name", Value: val.Name},
+	filter := bson.D{{"volume", val.Volume}}
+	update := bson.D{{"$set", bson.D{
+		{"name", val.Name},
 	}}}
 	res, err := conn.Collection("lonlatpost").UpdateOne(ctx, filter, update)
 	if err != nil {
@@ -31,7 +31,7 @@ func UpdateNameGeo(Mongoenv, dbname string, ctx context.Context, val LonLatPrope
 
 func DeleteDataGeo(Mongoenv, dbname string, ctx context.Context, val LonLatProperties) (DeletedId interface{}) {
 	conn := GetConnectionMongo(Mongoenv, dbname)
-	filter := bson.D{{Key: "volume", Value: val.Volume}}
+	filter := bson.D{{"volume", val.Volume}}
 	res, err := conn.Collection("lonlatpost").DeleteOne(ctx, filter)
 	if err != nil {
 		return "Gagal Delete"
@@ -45,25 +45,4 @@ func IsExist(Tokenstr, PublicKey string) bool {
 		return false
 	}
 	return true
-}
-
-func GetCoordinateNear(MongoConn *mongo.Database, colname string, coordinate []float64) (result []GeoJson, err error) {
-	filter := bson.M{"geometry.coordinates": bson.M{
-		"$near": bson.M{
-			"$geometry": bson.M{
-				"type":        "LineString",
-				"coordinates": coordinate,
-			},
-		},
-	}}
-	curr, err := MongoConn.Collection(colname).Find(context.Background(), filter)
-	if err != nil {
-		return nil, err
-	}
-	defer curr.Close(context.Background())
-	err = curr.All(context.Background(), &result)
-	if err != nil {
-		return nil, err
-	}
-	return result, nil
 }

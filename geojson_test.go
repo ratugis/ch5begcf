@@ -1,4 +1,4 @@
-package gcfbackendfa
+package gisbackend
 
 import (
 	"context"
@@ -19,35 +19,35 @@ func TestGeneratePaseto(t *testing.T) {
 	privateKey, publicKey := watoken.GenerateKey()
 	fmt.Println(privateKey)
 	fmt.Println(publicKey)
-	hasil, err := watoken.Encode("gis5", "PrivateKey")
+	hasil, err := watoken.Encode("gilar", "PrivateKey")
 	fmt.Println(hasil, err)
 }
 
 func TestUpdateData(t *testing.T) {
 	data := LonLatProperties{
 		Type:   "Polygon",
-		Name:   "Martabak Manis",
+		Name:   "aci",
 		Volume: "1",
 	}
-	up := UpdateNameGeo("MONGOSTRING", "gis4", context.Background(), data)
+	up := UpdateNameGeo("MONGOSTRING", "gis", context.Background(), data)
 	fmt.Println(up)
 }
 
 func TestDeleteDataGeo(t *testing.T) {
 	data := LonLatProperties{
-		Type:   "Polygon",
-		Name:   "Martabak Manis",
+		Type:   "Point",
+		Name:   "ggwp",
 		Volume: "1",
 	}
-	up := DeleteDataGeo("MONGOSTRING", "gis4", context.Background(), data)
+	up := DeleteDataGeo("MONGOSTRING", "gis", context.Background(), data)
 	fmt.Println(up)
 }
 
 func TestInsertUser(t *testing.T) {
-	conn := GetConnectionMongo("MONGOSTRING", "gis4")
-	pass, _ := pasproj.HashPass("iyaslodons")
+	conn := GetConnectionMongo("MONGOSTRING", "nyoba")
+	pass, _ := pasproj.HashPass("gilar")
 	data := RegisterStruct{
-		Username: "iyas",
+		Username: "coba",
 		Password: pass,
 	}
 	ins := InsertUserdata(conn, data.Username, data.Password)
