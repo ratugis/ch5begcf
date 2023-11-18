@@ -19,7 +19,7 @@ func TestGeneratePaseto(t *testing.T) {
 	privateKey, publicKey := watoken.GenerateKey()
 	fmt.Println(privateKey)
 	fmt.Println(publicKey)
-	hasil, err := watoken.Encode("gilar", "PrivateKey")
+	hasil, err := watoken.Encode("ratu", "PrivateKey")
 	fmt.Println(hasil, err)
 }
 
@@ -45,7 +45,7 @@ func TestDeleteDataGeo(t *testing.T) {
 
 func TestInsertUser(t *testing.T) {
 	conn := GetConnectionMongo("MONGOSTRING", "nyoba")
-	pass, _ := pasproj.HashPass("gilar")
+	pass, _ := pasproj.HashPass("ratu")
 	data := RegisterStruct{
 		Username: "coba",
 		Password: pass,
